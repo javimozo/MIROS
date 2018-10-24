@@ -29,20 +29,20 @@ def angle_diff(unit1, unit2):
 
 
 Heading_files = glob.glob('C:/Users/admin/Desktop/javimozo/MIROS/Project/DF037&DWR/DF025/*.DF025')
-Heading_Params = pd.DataFrame({'Heading':[], 'HeadingMaxSpr':[]})
+#Heading_Params = pd.DataFrame({'Heading':[], 'HeadingMaxSpr':[]})
 
 start_time = time.clock()
+
+# empty lists
+DateTime = []       
+Heading = []
+HeadingMaxSpr = []
 
 for Heading_file in Heading_files:
 
     with open(Heading_file, 'r') as Heading_data:
 
         Heading_serie = pd.read_table(Heading_data, header=None)
-
-    # empty lists
-    DateTime = []       
-    Heading = []
-    HeadingMaxSpr = []
 
     for i in range(int(len(Heading_serie)/75)):
     #    date = Heading_serie.iloc[3+75*i,[0]][0]
@@ -56,17 +56,17 @@ for Heading_file in Heading_files:
             Heading.append(float(Heading_serie.iloc[6+75*i,[0]][0][17:20]))
             HeadingMaxSpr.append(float(Heading_serie.iloc[6+75*i,[0]][0][21:24]))
 
-    # create a dictionary with data from every parameter    
-    data = {'Heading':Heading[:], 'HeadingMaxSpr':HeadingMaxSpr[:]}
+# create a dictionary with data from every parameter    
+data = {'Heading':Heading[:], 'HeadingMaxSpr':HeadingMaxSpr[:]}
 
-    # create a dataframe where to include data as it is extracted 
-    Heading_params = pd.DataFrame(data, index=DateTime)
+# create a dataframe where to include data
+Heading_params = pd.DataFrame(data, index=DateTime)
 
-    #concatenate DataFrame to previous (empty) generated ones    
-    Heading_Params = pd.concat([Heading_Params, Heading_params])
+#    #concatenate DataFrame to previous (empty) generated ones    
+#    Heading_Params = pd.concat([Heading_Params, Heading_params])
 
 # upsample data to fill gaps in final DataFrame
-Heading_Params_asfreq = Heading_Params.asfreq('T')
+Heading_params_asfreq = Heading_params.asfreq('T')
 
 end_time = time.clock()
 print ('time elapsed: ', (end_time - start_time))
